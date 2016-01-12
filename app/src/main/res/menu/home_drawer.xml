@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<group android:id="@+id/group_home" android:checkableBehavior="single">
+		<item
+			android:id="@+id/nav_home"
+			android:icon="@drawable/ic_home"
+			android:title="@string/title_activity_home"/>
+	</group>
+
+	<group android:id="@+id/group_classes" android:checkableBehavior="single">
+		<item
+			android:id="@+id/nav_modules"
+			android:icon="@drawable/ic_class"
+			android:title="@string/title_activity_modules"/>
+		<item
+			android:id="@+id/nav_projects"
+			android:icon="@drawable/ic_extension"
+			android:title="@string/title_activity_projects"/>
+		<item
+			android:id="@+id/nav_marks"
+			android:icon="@drawable/ic_marks"
+			android:title="@string/title_activity_marks"/>
+	</group>
+
+	<group android:id="@+id/group_activities" android:checkableBehavior="single">
+		<item
+			android:id="@+id/nav_planning"
+			android:icon="@drawable/ic_planning"
+			android:title="@string/title_activity_planning"/>
+
+		<item
+			android:id="@+id/nav_events"
+			android:icon="@drawable/ic_event"
+			android:title="@string/title_activity_events"/>
+	</group>
+
+	<group android:id="@+id/group_others" android:checkableBehavior="single">
+		<item
+			android:id="@+id/nav_alerts"
+			android:icon="@drawable/ic_alerts"
+			android:title="@string/title_activity_alerts"/>
+
+		<item
+			android:id="@+id/nav_trombi"
+			android:icon="@drawable/ic_trombi"
+			android:title="@string/title_activity_trombi"/>
+	</group>
+
+	<group android:id="@+id/group_diconnect" android:checkableBehavior="single">
+		<item
+			android:id="@+id/nav_login"
+			android:icon="@drawable/ic_disconnect"
+			android:title="@string/action_disconnect"/>
+	</group>
+
+</menu>

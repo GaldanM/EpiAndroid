@@ -1,0 +1,30 @@
+<resources>
+	<string name="app_name">EpiAndroid</string>
+
+	<string name="title_activity_login">Login</string>
+	<string name="prompt_login">Login</string>
+	<string name="prompt_password">Password</string>
+	<string name="action_log_in">Log In</string>
+	<string name="action_disconnect">Disconnect</string>
+	<string name="error_invalid_login">Incorrect login format</string>
+	<string name="error_incorrect_cred">Incorrect login/password</string>
+	<string name="error_field_required">This field is required</string>
+	<string name="remember_me">Remember me</string>
+
+	<string name="title_activity_home">Home</string>
+	<string name="navigation_drawer_open">Open navigation drawer</string>
+	<string name="navigation_drawer_close">Close navigation drawer</string>
+
+
+	<string name="title_activity_alerts">Alerts</string>
+	<string name="title_activity_trombi">Trombi</string>
+	<string name="title_activity_modules">Modules</string>
+	<string name="title_activity_projects">Projects</string>
+	<string name="title_activity_marks">Marks</string>
+	<string name="title_activity_planning">Planning</string>
+	<string name="title_activity_events">Events</string>
+	<string name="title_activity_susies">Susies</string>
+
+
+	<string name="action_settings">Settings</string>
+</resources>
