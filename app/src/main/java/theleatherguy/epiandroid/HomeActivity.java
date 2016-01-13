@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -27,6 +28,7 @@ import java.util.List;
 import cz.msebera.android.httpclient.Header;
 import theleatherguy.epiandroid.Adapters.ListDeliveriesAdapter;
 import theleatherguy.epiandroid.Beans.Infos;
+import theleatherguy.epiandroid.Beans.Login;
 import theleatherguy.epiandroid.EpitechAPI.EpitechRest;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
@@ -41,6 +43,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 	private List<Infos.Board.Event>   _tomorrow;
 	private List<Infos.Board.Project> _deliveries;
 	//private List<>   _marks;
+
+	private Infos 		_infos;
+	private TextView 	_headerLogin;
+	private TextView 	_headerGpa;
+	private TextView 	_headerCity;
+	private TextView 	_headerCredit;
+	private TextView 	_headerPromo;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -73,9 +82,44 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 		listMarks = (ListView) findViewById(R.id.listMarks);
 		listMarks.setEmptyView(findViewById(R.id.emptyMarks));
 
+		_headerCredit = (TextView)findViewById(R.id.txtCredit);
+		_headerPromo = (TextView)findViewById(R.id.txtPromo);
+		_headerLogin = (TextView)findViewById(R.id.txtLogin);
+		_headerGpa = (TextView)findViewById(R.id.txtGpa);
+		_headerCity = (TextView)findViewById(R.id.txtCity);
+
 		getWeekDelivery();
 
+		getUserInfo();
+
 		Toast.makeText(getApplicationContext(), _token, Toast.LENGTH_LONG).show();
+	}
+
+	private void getUserInfo()
+	{
+		RequestParams params = new RequestParams();
+		params.put("user", "moulin_c");
+		params.put("token", _token);
+
+		EpitechRest.get("user", params, new JsonHttpResponseHandler()
+		{
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, JSONObject response)
+			{
+				_infos = new Gson().fromJson(response.toString(), Infos.class);
+				_headerCredit.setText(_infos.infos.credits);
+				_headerPromo.setText(_infos.infos.promo);
+				_headerLogin.setText(_infos.infos.login);
+				_headerGpa.setText(_infos.infos.gpa.gpa);
+				//_headerCity.setText(_infos.infos.);
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse)
+			{
+
+			}
+		});
 	}
 
 	@Override
