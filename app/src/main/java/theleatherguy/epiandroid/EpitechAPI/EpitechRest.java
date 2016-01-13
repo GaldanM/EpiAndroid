@@ -4,7 +4,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
-public class EpitechRestClient
+public class EpitechRest
 {
 	private static final String BASE_URL = "https://epitech-api.herokuapp.com/";
 

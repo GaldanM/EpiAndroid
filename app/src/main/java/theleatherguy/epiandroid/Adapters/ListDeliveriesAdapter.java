@@ -9,12 +9,12 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import theleatherguy.epiandroid.Beans.Project;
+import theleatherguy.epiandroid.Beans.Infos;
 import theleatherguy.epiandroid.R;
 
-public class ListProjectsAdapter extends ArrayAdapter<Project>
+public class ListDeliveriesAdapter extends ArrayAdapter<Infos.Project>
 {
-	public ListProjectsAdapter(Context context, List<Project> listProjects)
+	public ListDeliveriesAdapter(Context context, List<Infos.Project> listProjects)
 	{
 		super(context, 0, listProjects);
 	}
@@ -34,10 +34,10 @@ public class ListProjectsAdapter extends ArrayAdapter<Project>
 			convertView.setTag(viewHolder);
 		}
 
-		Project proj = getItem(position);
+		Infos.Project proj = getItem(position);
 
-		viewHolder.project.setText(proj.project);
-		viewHolder.module.setText(proj.module);
+		viewHolder.project.setText(proj.acti_title);
+		viewHolder.module.setText(proj.title_module);
 
 		return convertView;
 	}
