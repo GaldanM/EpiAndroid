@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -26,26 +25,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
-import theleatherguy.epiandroid.Adapters.ListProjectsAdapter;
-import theleatherguy.epiandroid.Beans.Event;
-import theleatherguy.epiandroid.Beans.Project;
-import theleatherguy.epiandroid.EpitechAPI.EpitechRestClient;
+import theleatherguy.epiandroid.Adapters.ListDeliveriesAdapter;
+import theleatherguy.epiandroid.Beans.Infos;
+import theleatherguy.epiandroid.EpitechAPI.EpitechRest;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
 {
-	private LinearLayout    layoutToday;
 	private ListView        listToday;
-	private LinearLayout    layoutTomorrow;
 	private ListView        listTomorrow;
-	private LinearLayout    layoutRendus;
-	private ListView        listRendus;
-	private LinearLayout    layoutMarks;
+	private ListView        listDeliveries;
 	private ListView        listMarks;
 
-	private String          _token;
-	private List<Event>     _today;
-	private List<Event>     _tomorrow;
-	private List<Project>   _rendus;
+	private String              _token;
+	private List<Infos.Board.Event>   _today;
+	private List<Infos.Board.Event>   _tomorrow;
+	private List<Infos.Board.Project> _deliveries;
 	//private List<>   _marks;
 
 	@Override
@@ -74,21 +68,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 		listToday.setEmptyView(findViewById(R.id.emptyToday));
 		listTomorrow = (ListView) findViewById(R.id.listTomorrow);
 		listTomorrow.setEmptyView(findViewById(R.id.emptyTomorrow));
-		listRendus = (ListView) findViewById(R.id.listRendus);
-		listRendus.setEmptyView(findViewById(R.id.emptyRendus));
+		listDeliveries = (ListView) findViewById(R.id.listDeliveries);
+		listDeliveries.setEmptyView(findViewById(R.id.emptyDeliveries));
 		listMarks = (ListView) findViewById(R.id.listMarks);
 		listMarks.setEmptyView(findViewById(R.id.emptyMarks));
 
-		/*layoutToday = (LinearLayout) findViewById(R.id.layoutToday);
-		layoutTomorrow = (LinearLayout) findViewById(R.id.layoutTomorrow);
-		layoutRendus = (LinearLayout) findViewById(R.id.layoutRendus);
-		layoutMarks = (LinearLayout) findViewById(R.id.layoutMarks);*/
-
-		getProjects();
-
-		//listToday.setAdapter(new ListEventsAdapter(HomeActivity.this, _today));
-		//listTomorrow.setAdapter(new ListEventsAdapter(HomeActivity.this, _tomorrow));
-		//listMarks.setAdapter(new ListActivities(HomeActivity.this, _marks));
+		getWeekDelivery();
 
 		Toast.makeText(getApplicationContext(), _token, Toast.LENGTH_LONG).show();
 	}
@@ -139,7 +124,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 		if (id == R.id.nav_home)
 		{
-			// Handle the camera action
+
 		} else if (id == R.id.nav_alerts)
 		{
 
@@ -171,25 +156,25 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 		return true;
 	}
 
-	private void getProjects()
+	private void getWeekDelivery()
 	{
 		RequestParams params = new RequestParams();
 		params.put("token", _token);
 
-		EpitechRestClient.get("projects", params, new JsonHttpResponseHandler()
+		EpitechRest.get("projects", params, new JsonHttpResponseHandler()
 		{
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, JSONArray response)
 			{
-				List<Project> projs = new Gson().fromJson(response.toString(), new TypeToken<List<Project>>(){}.getType());
-				_rendus = new ArrayList<>();
-				for (Project proj:projs)
+				List<Infos.Board.Project> projs = new Gson().fromJson(response.toString(), new TypeToken<List<Infos.Board.Project>>(){}.getType());
+				_deliveries = new ArrayList<>();
+				for (Infos.Board.Project proj:projs)
 				{
-					if (proj.isRegistered == 1
-							&& (proj.type.equals("Mini-Projets") || proj.type.equals("Projet")))
-						_rendus.add(proj);
+					if (proj.registered == 1
+							&& (proj.type_acti.equals("Mini-Projets") || proj.type_acti.equals("Projet")))
+						_deliveries.add(proj);
 				}
-				listRendus.setAdapter(new ListProjectsAdapter(HomeActivity.this, _rendus));
+				listDeliveries.setAdapter(new ListDeliveriesAdapter(HomeActivity.this, _deliveries));
 			}
 
 			@Override

@@ -12,9 +12,9 @@ import java.util.List;
 import theleatherguy.epiandroid.Beans.Infos;
 import theleatherguy.epiandroid.R;
 
-public class ListDeliveriesAdapter extends ArrayAdapter<Infos.Project>
+public class ListDeliveriesAdapter extends ArrayAdapter<Infos.Board.Project>
 {
-	public ListDeliveriesAdapter(Context context, List<Infos.Project> listProjects)
+	public ListDeliveriesAdapter(Context context, List<Infos.Board.Project> listProjects)
 	{
 		super(context, 0, listProjects);
 	}
@@ -34,7 +34,7 @@ public class ListDeliveriesAdapter extends ArrayAdapter<Infos.Project>
 			convertView.setTag(viewHolder);
 		}
 
-		Infos.Project proj = getItem(position);
+		Infos.Board.Project proj = getItem(position);
 
 		viewHolder.project.setText(proj.acti_title);
 		viewHolder.module.setText(proj.title_module);

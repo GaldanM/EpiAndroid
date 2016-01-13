@@ -19,7 +19,7 @@ import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 import theleatherguy.epiandroid.Beans.Login;
-import theleatherguy.epiandroid.EpitechAPI.EpitechRestClient;
+import theleatherguy.epiandroid.EpitechAPI.EpitechRest;
 
 public class LoginActivity extends AppCompatActivity
 {
@@ -116,7 +116,7 @@ public class LoginActivity extends AppCompatActivity
 		params.put("login", login);
 		params.put("password", password);
 
-		EpitechRestClient.post("login", params, new JsonHttpResponseHandler()
+		EpitechRest.post("login", params, new JsonHttpResponseHandler()
 		{
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, JSONObject response)
