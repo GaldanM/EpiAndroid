@@ -12,9 +12,9 @@ import java.util.List;
 import theleatherguy.epiandroid.Beans.Infos;
 import theleatherguy.epiandroid.R;
 
-public class ListDeliveriesAdapter extends ArrayAdapter<Infos.Board.Project>
+public class ListDeliveriesHomeAdapter extends ArrayAdapter<Infos.Board.Project>
 {
-	public ListDeliveriesAdapter(Context context, List<Infos.Board.Project> listProjects)
+	public ListDeliveriesHomeAdapter(Context context, List<Infos.Board.Project> listProjects)
 	{
 		super(context, 0, listProjects);
 	}
