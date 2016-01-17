@@ -29,7 +29,7 @@ public class ListMarksHomeAdapter extends ArrayAdapter<Infos.Board.Mark>
 		if (viewHolder == null)
 		{
 			viewHolder = new MarkViewHolder();
-			viewHolder.proj = (TextView) convertView.findViewById(R.id.textMark);
+			viewHolder.proj = (TextView) convertView.findViewById(R.id.textProject);
 			viewHolder.mark = (TextView) convertView.findViewById(R.id.textMark);
 			convertView.setTag(viewHolder);
 		}

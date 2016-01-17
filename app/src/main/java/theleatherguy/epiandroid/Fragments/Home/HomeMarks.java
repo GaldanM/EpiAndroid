@@ -29,11 +29,13 @@ public class HomeMarks extends Fragment
 	private ListView    listMarks;
 	private String                      _token;
 	private List<Infos.Board.Mark>      _marks;
+	private View                        rootView;
+
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		View rootView = inflater.inflate(R.layout.fragment_marks_home, container, false);
+		rootView = inflater.inflate(R.layout.fragment_marks_home, container, false);
 		super.onCreate(savedInstanceState);
 
 		Intent intent = getActivity().getIntent();
@@ -44,8 +46,6 @@ public class HomeMarks extends Fragment
 		listMarks.setEmptyView(rootView.findViewById(R.id.emptyMarks));
 
 		getMarks();
-
-		Toast.makeText(getActivity().getApplicationContext(), _token, Toast.LENGTH_LONG).show();
 
 		return (rootView);
 	}
@@ -67,6 +67,8 @@ public class HomeMarks extends Fragment
 					_marks.add(mark);
 				}
 				listMarks.setAdapter(new ListMarksHomeAdapter(getActivity(), _marks));
+				rootView.findViewById(R.id.card_marks).setVisibility(View.VISIBLE);
+				rootView.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 			}
 
 			@Override

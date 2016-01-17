@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
 import theleatherguy.epiandroid.Adapters.ListDeliveriesHomeAdapter;
@@ -35,17 +36,12 @@ public class HomeDeliveries extends Fragment
 	private String                      _token;
 	private ListView                    listDeliveries;
 	private List<Infos.Board.Project>   _deliveries;
-
-	@Override
-	public void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-	}
+	private View                        rootView;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		View rootView = inflater.inflate(R.layout.fragment_deliveries_home, container, false);
+		rootView = inflater.inflate(R.layout.fragment_deliveries_home, container, false);
 		super.onCreate(savedInstanceState);
 
 		Intent intent = getActivity().getIntent();
@@ -56,8 +52,6 @@ public class HomeDeliveries extends Fragment
 		listDeliveries.setEmptyView(rootView.findViewById(R.id.emptyDeliveries));
 
 		getWeekDelivery();
-
-		Toast.makeText(getActivity().getApplicationContext(), _token, Toast.LENGTH_LONG).show();
 
 		return (rootView);
 	}
@@ -72,7 +66,7 @@ public class HomeDeliveries extends Fragment
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, JSONArray response)
 			{
-				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.FRANCE);
 				Calendar t = Calendar.getInstance();
 				t.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
 				List<Infos.Board.Project> projs = new Gson().fromJson(response.toString(), new TypeToken<List<Infos.Board.Project>>(){}.getType());
@@ -88,7 +82,7 @@ public class HomeDeliveries extends Fragment
 						{
 							Calendar c = Calendar.getInstance();
 							c.setTime(format.parse(proj.end_acti));
-							//if (c.get(Calendar.DAY_OF_YEAR) == t.get(Calendar.DAY_OF_YEAR))
+							if (c.get(Calendar.DAY_OF_YEAR) == t.get(Calendar.DAY_OF_YEAR))
 								_deliveries.add(proj);
 						}
 						catch (ParseException e)
@@ -98,6 +92,8 @@ public class HomeDeliveries extends Fragment
 					}
 				}
 				listDeliveries.setAdapter(new ListDeliveriesHomeAdapter(getActivity(), _deliveries));
+				rootView.findViewById(R.id.card_deliveries).setVisibility(View.VISIBLE);
+				rootView.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 			}
 
 			@Override

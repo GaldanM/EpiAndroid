@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
 import theleatherguy.epiandroid.Adapters.ListEventsHomeAdapter;
@@ -32,11 +33,13 @@ public class HomeToday extends Fragment
 	private ListView    listToday;
 	private String                      _token;
 	private List<Infos.Board.Event>     _today;
+	private View                        rootView;
+
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		View rootView = inflater.inflate(R.layout.fragment_marks_home, container, false);
+		rootView = inflater.inflate(R.layout.fragment_today_home, container, false);
 		super.onCreate(savedInstanceState);
 
 		Intent intent = getActivity().getIntent();
@@ -47,8 +50,6 @@ public class HomeToday extends Fragment
 		listToday.setEmptyView(rootView.findViewById(R.id.emptyToday));
 
 		getToday();
-
-		Toast.makeText(getActivity().getApplicationContext(), _token, Toast.LENGTH_LONG).show();
 
 		return (rootView);
 	}
@@ -63,7 +64,7 @@ public class HomeToday extends Fragment
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, JSONObject response)
 			{
-				SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy, HH:mm");
+				SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.FRANCE);
 				Calendar t = Calendar.getInstance();
 				_today = new ArrayList<>();
 				Infos infos = new Gson().fromJson(response.toString(), Infos.class);
@@ -75,7 +76,7 @@ public class HomeToday extends Fragment
 						{
 							Calendar c = Calendar.getInstance();
 							c.setTime(format.parse(event.timeline_start));
-							if (c.get(Calendar.DAY_OF_MONTH) == t.get(Calendar.DAY_OF_MONTH))
+							if (c.get(Calendar.DAY_OF_MONTH) == t.get(Calendar.DAY_OF_MONTH) || event.token.equals("1"))
 								_today.add(event);
 						} catch (ParseException e)
 						{
@@ -83,7 +84,9 @@ public class HomeToday extends Fragment
 						}
 					}
 				}
-				listToday.setAdapter(new ListEventsHomeAdapter(getActivity(), _today));
+				listToday.setAdapter(new ListEventsHomeAdapter(getActivity(), _today, _token));
+				rootView.findViewById(R.id.card_today).setVisibility(View.VISIBLE);
+				rootView.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 			}
 
 			@Override

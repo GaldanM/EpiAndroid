@@ -16,7 +16,7 @@
 	<string name="navigation_drawer_close">Close navigation drawer</string>
 
 
-	<string name="title_activity_alerts">Alerts</string>
+	<string name="title_activity_alerts">Messages</string>
 	<string name="title_activity_trombi">Trombi</string>
 	<string name="title_activity_modules">Modules</string>
 	<string name="title_activity_projects">Projects</string>
@@ -27,4 +27,13 @@
 
 
 	<string name="action_settings">Settings</string>
+	<string name="empty_marks">No recent marks</string>
+	<string name="recent_marks">Recent Marks</string>
+	<string name="empty_deliveries">No deliveries this week</string>
+	<string name="week_deliveries">This Week Deliveries</string>
+	<string name="empty_tomorrow">Nothing to do tomorrow</string>
+	<string name="tomorrow_activities">Tomorrow Activities</string>
+	<string name="empty_today">Nothing to do today</string>
+	<string name="today_activities">Today Activities</string>
+	<string name="token">Token</string>
 </resources>

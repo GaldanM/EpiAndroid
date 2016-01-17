@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
 import theleatherguy.epiandroid.Adapters.ListEventsHomeAdapter;
@@ -29,14 +30,15 @@ import theleatherguy.epiandroid.R;
 
 public class HomeTomorrow extends Fragment
 {
-	private ListView    listTomorrow;
+	private ListView                    listTomorrow;
 	private String                      _token;
 	private List<Infos.Board.Event>     _tomorrow;
+	private View                        rootView;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		View rootView = inflater.inflate(R.layout.fragment_marks_home, container, false);
+		rootView = inflater.inflate(R.layout.fragment_tomorrow_home, container, false);
 		super.onCreate(savedInstanceState);
 
 		Intent intent = getActivity().getIntent();
@@ -47,8 +49,6 @@ public class HomeTomorrow extends Fragment
 		listTomorrow.setEmptyView(rootView.findViewById(R.id.emptyTomorrow));
 
 		getTomorrow();
-
-		Toast.makeText(getActivity().getApplicationContext(), _token, Toast.LENGTH_LONG).show();
 
 		return (rootView);
 	}
@@ -63,7 +63,7 @@ public class HomeTomorrow extends Fragment
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, JSONObject response)
 			{
-				SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy, HH:mm");
+				SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.FRANCE);
 				Calendar t = Calendar.getInstance();
 				_tomorrow = new ArrayList<>();
 				Infos infos = new Gson().fromJson(response.toString(), Infos.class);
@@ -84,7 +84,9 @@ public class HomeTomorrow extends Fragment
 						}
 					}
 				}
-				listTomorrow.setAdapter(new ListEventsHomeAdapter(getActivity(), _tomorrow));
+				listTomorrow.setAdapter(new ListEventsHomeAdapter(getActivity(), _tomorrow, _token));
+				rootView.findViewById(R.id.card_tomorrow).setVisibility(View.VISIBLE);
+				rootView.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 			}
 
 			@Override

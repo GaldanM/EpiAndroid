@@ -8,14 +8,29 @@
 	<TextView
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="New Text"
-		android:id="@+id/textProject"
+		android:id="@+id/textEvent"
 		android:textStyle="bold"/>
 
 	<TextView
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="New Text"
 		android:id="@+id/textModule"
 		android:textStyle="italic"/>
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/textDate"/>
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/textSalle"/>
+
+	<Button
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/bToken"
+		android:text="@string/token"
+		android:visibility="gone"/>
 </LinearLayout>

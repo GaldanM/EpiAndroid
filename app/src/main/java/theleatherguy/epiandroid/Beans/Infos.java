@@ -75,6 +75,8 @@ public class Infos
 		}
 		public List<Module>     modules;
 	}
+	@SerializedName("board")
+	public Board    board;
 
 	public class Message
 	{
@@ -107,6 +109,7 @@ public class Infos
 
 		public String  internal_email;
 
+		/*
 		public class UserInfo
 		{
 			public class Phone
@@ -114,13 +117,14 @@ public class Infos
 				public String   value;
 			}
 			public Phone    telephone;
+
 			public class Birthday
 			{
 				public String   value;
 			}
 			public Birthday birthday;
 		}
-		public UserInfo userinfo;
+		public UserInfo userinfo;*/
 
 		public String   picture;
 
@@ -139,8 +143,7 @@ public class Infos
 			public String   gpa;
 			public String   cycle;
 		}
-
-		public GPA      gpa;
+		public List<GPA>      gpa;
 
 		public class Netsoul
 		{

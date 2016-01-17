@@ -3,6 +3,9 @@ package theleatherguy.epiandroid;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTabHost;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,58 +15,46 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-
 import cz.msebera.android.httpclient.Header;
-import theleatherguy.epiandroid.Adapters.ListDeliveriesAdapter;
-import theleatherguy.epiandroid.Adapters.ListEventsHomeAdapter;
 import theleatherguy.epiandroid.Beans.Infos;
 import theleatherguy.epiandroid.EpitechAPI.EpitechRest;
+import theleatherguy.epiandroid.Fragments.Home.Home;
+import theleatherguy.epiandroid.Fragments.Home.HomeToday;
+import theleatherguy.epiandroid.Fragments.Modules.Modules;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
 {
+	FragmentTabHost     _tabHost;
+	DrawerLayout        _drawer;
+	NavigationView      _nav;
+
 	private View        headerNav;
-	private ListView    listToday;
-	private ListView    listTomorrow;
-	private ListView    listDeliveries;
-	private ListView    listMarks;
-	private TextView 	headerLogin;
+	private TextView    headerLogin;
 	private ImageView   headerPicture;
 	private TextView    headerGpa;
 	private TextView    headerCity;
 	private TextView    headerCredit;
 	private TextView    headerPromo;
 
-	private String                      _token;
-	private String                      _login;
-	private List<Infos.Board.Event>     _today;
-	private List<Infos.Board.Event>     _tomorrow;
-	private List<Infos.Board.Project>   _deliveries;
-	//private List<>   _marks;
+	private String      _token;
+	private String      _login;
 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_home);
+		setContentView(R.layout.activity_main);
 
 		Intent intent = getIntent();
 		if (intent != null)
@@ -75,16 +66,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 
-		DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-		ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-		drawer.setDrawerListener(toggle);
+		_drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+		ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, _drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+		_drawer.setDrawerListener(toggle);
 		toggle.syncState();
 
-		NavigationView nav = (NavigationView) findViewById(R.id.nav_view);
-		nav.getMenu().getItem(0).setChecked(true);
-		nav.setNavigationItemSelectedListener(this);
+		_nav = (NavigationView) findViewById(R.id.nav_view);
+		_nav.getMenu().getItem(0).setChecked(true);
+		_nav.setNavigationItemSelectedListener(this);
+		_nav.getMenu().performIdentifierAction(R.id.nav_home, 0);
 
-		headerNav = nav.getHeaderView(0);
+		headerNav = _nav.getHeaderView(0);
 		headerPicture = (ImageView) headerNav.findViewById(R.id.intraPic);
 		headerCredit = (TextView) headerNav.findViewById(R.id.txtCredit);
 		headerPromo = (TextView) headerNav.findViewById(R.id.txtPromo);
@@ -92,21 +84,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		headerGpa = (TextView) headerNav.findViewById(R.id.txtGpa);
 		headerCity = (TextView) headerNav.findViewById(R.id.txtCity);
 
-		listToday = (ListView) findViewById(R.id.listToday);
-		listTomorrow = (ListView) findViewById(R.id.listTomorrow);
-		listDeliveries = (ListView) findViewById(R.id.listDeliveries);
-		listMarks = (ListView) findViewById(R.id.listMarks);
-
-		listToday.setEmptyView(findViewById(R.id.emptyToday));
-		listTomorrow.setEmptyView(findViewById(R.id.emptyTomorrow));
-		listDeliveries.setEmptyView(findViewById(R.id.emptyDeliveries));
-		listMarks.setEmptyView(findViewById(R.id.emptyMarks));
-
-		getActivities();
-		getWeekDelivery();
 		getUserInfo();
-
-		Toast.makeText(getApplicationContext(), _token, Toast.LENGTH_LONG).show();
 	}
 
 	@Override
@@ -125,8 +103,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.home, menu);
+		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
 
@@ -146,128 +123,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 	@Override
 	public boolean onNavigationItemSelected(MenuItem item)
 	{
-		// Handle navigation view item clicks here.
+		Fragment fragment = null;
 		int id = item.getItemId();
 
-		if (id == R.id.nav_home)
+		switch (id)
 		{
-
-		} else if (id == R.id.nav_alerts)
-		{
-
-		} else if (id == R.id.nav_trombi)
-		{
-
-		} else if (id == R.id.nav_modules)
-		{
-
-		} else if (id == R.id.nav_projects)
-		{
-
-		} else if (id == R.id.nav_marks)
-		{
-
-		} else if (id == R.id.nav_planning)
-		{
-
-		} else if (id == R.id.nav_events)
-		{
-
-		} else if (id == R.id.nav_login)
-		{
-
+			case R.id.nav_home:
+				fragment = new Home();
+				break;
+			case R.id.nav_alerts:
+				break;
+			case R.id.nav_trombi:
+				break;
+			case R.id.nav_modules:
+				break;
+			case R.id.nav_projects:
+				break;
+			case R.id.nav_marks:
+				break;
+			case R.id.nav_planning:
+				fragment = new Modules();
+				break;
+			case R.id.nav_events:
+				break;
+			case R.id.nav_login:
+				break;
+			default:
+				fragment = new Home();
 		}
 
-		DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-		drawer.closeDrawer(GravityCompat.START);
+		FragmentManager manager = getSupportFragmentManager();
+		manager.beginTransaction().replace(R.id.frameLayout, fragment).commit();
+
+		item.setChecked(true);
+		setTitle(item.getTitle());
+		_drawer.closeDrawer(GravityCompat.START);
 
 		return true;
-	}
-
-	private void getActivities()
-	{
-		RequestParams params = new RequestParams();
-		params.put("token", _token);
-
-		EpitechRest.get("infos", params, new JsonHttpResponseHandler()
-		{
-			@Override
-			public void onSuccess(int statusCode, Header[] headers, JSONObject response)
-			{
-				SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy, HH:mm");
-				Calendar t = Calendar.getInstance();
-				_today = new ArrayList<>();
-				_tomorrow = new ArrayList<>();
-				Infos infos = new Gson().fromJson(response.toString(), Infos.class);
-				for (Infos.Board.Event event:infos.board.activites)
-				{
-					if (event.date_inscription.equals("false"))
-					{
-						try
-						{
-							Calendar c = Calendar.getInstance();
-							c.setTime(format.parse(event.timeline_start));
-							if (c.get(Calendar.DAY_OF_MONTH) == t.get(Calendar.DAY_OF_MONTH))
-								_today.add(event);
-							else if (c.get(Calendar.DAY_OF_MONTH) == t.get(Calendar.DAY_OF_MONTH) + 1)
-								_tomorrow.add(event);
-						} catch (ParseException e)
-						{
-							Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-						}
-					}
-				}
-				listToday.setAdapter(new ListEventsHomeAdapter(MainActivity.this, _today));
-				listTomorrow.setAdapter(new ListEventsHomeAdapter(MainActivity.this, _tomorrow));
-			}
-
-			@Override
-			public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse)
-			{
-				if (statusCode >= 400 && statusCode < 500)
-					Toast.makeText(getApplicationContext(), "Error from dev, soz !", Toast.LENGTH_LONG).show();
-				else if (statusCode >= 500)
-					Toast.makeText(getApplicationContext(), "Server downn, try again later", Toast.LENGTH_LONG).show();
-				else
-					Toast.makeText(getApplicationContext(), Integer.toString(statusCode), Toast.LENGTH_LONG).show();
-			}
-
-		});
-	}
-
-	private void getWeekDelivery()
-	{
-		RequestParams params = new RequestParams();
-		params.put("token", _token);
-
-		EpitechRest.get("projects", params, new JsonHttpResponseHandler()
-		{
-			@Override
-			public void onSuccess(int statusCode, Header[] headers, JSONArray response)
-			{
-				List<Infos.Board.Project> projs = new Gson().fromJson(response.toString(), new TypeToken<List<Infos.Board.Project>>(){}.getType());
-				_deliveries = new ArrayList<>();
-				for (Infos.Board.Project proj:projs)
-				{
-					if (proj.registered == 1
-							&& (proj.type_acti.equals("Mini-Projets") || proj.type_acti.equals("Projet")))
-						_deliveries.add(proj);
-				}
-				listDeliveries.setAdapter(new ListDeliveriesAdapter(MainActivity.this, _deliveries));
-			}
-
-			@Override
-			public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse)
-			{
-				if (statusCode >= 400 && statusCode < 500)
-					Toast.makeText(getApplicationContext(), "Error from dev, soz !", Toast.LENGTH_LONG).show();
-				else if (statusCode >= 500)
-					Toast.makeText(getApplicationContext(), "Server downn, try again later", Toast.LENGTH_LONG).show();
-				else
-					Toast.makeText(getApplicationContext(), Integer.toString(statusCode), Toast.LENGTH_LONG).show();
-			}
-
-		});
 	}
 
 	private void getUserInfo()
@@ -293,7 +185,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 			@Override
 			public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse)
 			{
-
+				if (statusCode >= 400 && statusCode < 500)
+					Toast.makeText(getApplicationContext(), "Error from dev, soz !", Toast.LENGTH_LONG).show();
+				else if (statusCode >= 500)
+					Toast.makeText(getApplicationContext(), "Server downn, try again later", Toast.LENGTH_LONG).show();
+				else
+					Toast.makeText(getApplicationContext(), Integer.toString(statusCode), Toast.LENGTH_LONG).show();
 			}
 		});
 	}

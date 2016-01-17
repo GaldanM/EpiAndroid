@@ -38,12 +38,7 @@ public class LoginActivity extends AppCompatActivity
 
 		_login = new Login();
 
-		ActionBar bar = getSupportActionBar();
-		if (bar != null)
-		{
-			bar.setDisplayShowHomeEnabled(true);
-			bar.setTitle(R.string.title_activity_login);
-		}
+		setTitle(R.string.title_activity_login);
 
 		_bConnect = (Button) findViewById(R.id.bConnect);
 		_editLogin = (EditText) findViewById(R.id.editLogin);
@@ -62,10 +57,10 @@ public class LoginActivity extends AppCompatActivity
 		_editLogin.setText("moulin_c");
 		_editPassword.setText("e_5HgyK3");
 		// ENDTODO
-
+/*
 		if (_editLogin.getText().length() > 0
 				&& _editPassword.getText().length() > 0)
-			attemptLogin();
+			attemptLogin();*/
 	}
 
 	private void attemptLogin()
@@ -123,8 +118,9 @@ public class LoginActivity extends AppCompatActivity
 			{
 				_login = new Gson().fromJson(response.toString(), Login.class);
 				_bConnect.setEnabled(true);
-				Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+				Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 				intent.putExtra("token", _login.token);
+				intent.putExtra("login", login);
 				startActivity(intent);
 			}
 
