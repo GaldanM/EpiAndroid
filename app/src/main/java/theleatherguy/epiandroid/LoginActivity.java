@@ -1,6 +1,7 @@
 package theleatherguy.epiandroid;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -40,6 +42,8 @@ public class LoginActivity extends AppCompatActivity
 
 		setTitle(R.string.title_activity_login);
 
+		TextView logo = (TextView) findViewById(R.id.textLogo);
+		logo.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Raleway.ttf"));
 		_bConnect = (Button) findViewById(R.id.bConnect);
 		_editLogin = (EditText) findViewById(R.id.editLogin);
 		_editPassword = (EditText) findViewById(R.id.editPassword);
