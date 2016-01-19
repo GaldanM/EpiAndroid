@@ -39,14 +39,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 	DrawerLayout        _drawer;
 	NavigationView      _nav;
 
-	private View        headerNav;
-	private TextView    headerLogin;
-	private ImageView   headerPicture;
-	private TextView    headerGpa;
-	private TextView    headerCity;
-	private TextView    headerCredit;
-	private TextView    headerPromo;
-
+	private Integer     id;
 	private String      _token;
 	private String      _login;
 
@@ -72,20 +65,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		_drawer.setDrawerListener(toggle);
 		toggle.syncState();
 
+		this.id = 0;
 		_nav = (NavigationView) findViewById(R.id.nav_view);
 		_nav.getMenu().getItem(0).setChecked(true);
 		_nav.setNavigationItemSelectedListener(this);
 		_nav.getMenu().performIdentifierAction(R.id.nav_home, 0);
-
-		headerNav = _nav.getHeaderView(0);
-		headerPicture = (ImageView) headerNav.findViewById(R.id.intraPic);
-		headerCredit = (TextView) headerNav.findViewById(R.id.txtCredit);
-		headerPromo = (TextView) headerNav.findViewById(R.id.txtPromo);
-		headerLogin = (TextView) headerNav.findViewById(R.id.txtLogin);
-		headerGpa = (TextView) headerNav.findViewById(R.id.txtGpa);
-		headerCity = (TextView) headerNav.findViewById(R.id.txtCity);
-
-		getUserInfo();
 	}
 
 	@Override
@@ -127,75 +111,41 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		Fragment fragment = null;
 		int id = item.getItemId();
 
-		switch (id)
+		if (this.id != id)
 		{
-			case R.id.nav_home:
-				fragment = new Home();
-				break;
-			case R.id.nav_alerts:
-				break;
-			case R.id.nav_trombi:
-				break;
-			case R.id.nav_modules:
-				break;
-			case R.id.nav_projects:
-				break;
-			case R.id.nav_marks:
-				break;
-			case R.id.nav_planning:
-				fragment = new Modules();
-				break;
-			case R.id.nav_events:
-				break;
-			case R.id.nav_login:
-				break;
-			default:
-				fragment = new Home();
+			switch (id)
+			{
+				case R.id.nav_home:
+					fragment = new Home();
+					break;
+				case R.id.nav_trombi:
+					break;
+				case R.id.nav_modules:
+					break;
+				case R.id.nav_projects:
+					break;
+				case R.id.nav_marks:
+					break;
+				case R.id.nav_planning:
+					fragment = new Modules();
+					break;
+				case R.id.nav_login:
+					break;
+				default:
+					fragment = new Home();
+			}
+			this.id = id;
+			FragmentManager manager = getSupportFragmentManager();
+			manager.beginTransaction()
+					.replace(R.id.frameLayout, fragment)
+					.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+					.commit();
+
+			item.setChecked(true);
+			setTitle(item.getTitle());
 		}
-
-		FragmentManager manager = getSupportFragmentManager();
-		manager.beginTransaction()
-				.replace(R.id.frameLayout, fragment)
-				.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-				.commit();
-
-		item.setChecked(true);
-		setTitle(item.getTitle());
 		_drawer.closeDrawer(GravityCompat.START);
 
 		return true;
-	}
-
-	private void getUserInfo()
-	{
-		RequestParams params = new RequestParams();
-		params.put("token", _token);
-		params.put("user", _login);
-
-		EpitechRest.get("user", params, new JsonHttpResponseHandler()
-		{
-			@Override
-			public void onSuccess(int statusCode, Header[] headers, JSONObject response)
-			{
-				Infos.Info info = new Gson().fromJson(response.toString(), Infos.Info.class);
-				Picasso.with(getApplicationContext()).load(info.picture).into(headerPicture);
-				headerCredit.setText(Integer.toString(info.credits));
-				headerPromo.setText(info.promo);
-				headerLogin.setText(info.login);
-				headerGpa.setText(info.gpa.get(0).gpa);
-				headerCity.setText(info.location);
-			}
-
-			@Override
-			public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse)
-			{
-				if (statusCode >= 400 && statusCode < 500)
-					Toast.makeText(getApplicationContext(), "Error from dev, soz !", Toast.LENGTH_LONG).show();
-				else if (statusCode >= 500)
-					Toast.makeText(getApplicationContext(), "Server downn, try again later", Toast.LENGTH_LONG).show();
-				else
-					Toast.makeText(getApplicationContext(), Integer.toString(statusCode), Toast.LENGTH_LONG).show();
-			}
-		});
 	}
 }

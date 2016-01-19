@@ -60,26 +60,32 @@ public class HomeMarks extends Fragment
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, JSONObject response)
 			{
-				_marks = new ArrayList<>();
-				Infos infos = new Gson().fromJson(response.toString(), Infos.class);
-				for (Infos.Board.Mark mark:infos.board.notes)
+				if (getActivity() != null)
 				{
-					_marks.add(mark);
+					_marks = new ArrayList<>();
+					Infos infos = new Gson().fromJson(response.toString(), Infos.class);
+					for (Infos.Board.Mark mark : infos.board.notes)
+					{
+						_marks.add(mark);
+					}
+					listMarks.setAdapter(new ListMarksHomeAdapter(getActivity(), _marks));
+					rootView.findViewById(R.id.card_marks).setVisibility(View.VISIBLE);
+					rootView.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 				}
-				listMarks.setAdapter(new ListMarksHomeAdapter(getActivity(), _marks));
-				rootView.findViewById(R.id.card_marks).setVisibility(View.VISIBLE);
-				rootView.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 			}
 
 			@Override
 			public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse)
 			{
-				if (statusCode >= 400 && statusCode < 500)
-					Toast.makeText(getActivity().getApplicationContext(), "Error from dev, soz !", Toast.LENGTH_LONG).show();
-				else if (statusCode >= 500)
-					Toast.makeText(getActivity().getApplicationContext(), "Server downn, try again later", Toast.LENGTH_LONG).show();
-				else
-					Toast.makeText(getActivity().getApplicationContext(), Integer.toString(statusCode), Toast.LENGTH_LONG).show();
+				if (getActivity() != null)
+				{
+					if (statusCode >= 400 && statusCode < 500)
+						Toast.makeText(getActivity().getApplicationContext(), "Error from dev, soz !", Toast.LENGTH_LONG).show();
+					else if (statusCode >= 500)
+						Toast.makeText(getActivity().getApplicationContext(), "Server downn, try again later", Toast.LENGTH_LONG).show();
+					else
+						Toast.makeText(getActivity().getApplicationContext(), Integer.toString(statusCode), Toast.LENGTH_LONG).show();
+				}
 			}
 
 		});

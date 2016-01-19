@@ -66,45 +66,52 @@ public class HomeDeliveries extends Fragment
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, JSONArray response)
 			{
-				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.FRANCE);
-				Calendar t = Calendar.getInstance();
-				t.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-				List<Infos.Board.Project> projs = new Gson().fromJson(response.toString(), new TypeToken<List<Infos.Board.Project>>(){}.getType());
-				_deliveries = new ArrayList<>();
-				for (Infos.Board.Project proj:projs)
+				if (getActivity() != null)
 				{
-					if (proj.registered == 1
-							&& (proj.type_acti.equals("Mini-Projets")
-							|| proj.type_acti.equals("Projet")))
+					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.FRANCE);
+					Calendar t = Calendar.getInstance();
+					t.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+					List<Infos.Board.Project> projs = new Gson().fromJson(response.toString(), new TypeToken<List<Infos.Board.Project>>()
 					{
-						Log.d(this.getClass().getName(), "END_ACTI :: " + proj.end_acti);
-						try
+					}.getType());
+					_deliveries = new ArrayList<>();
+					for (Infos.Board.Project proj : projs)
+					{
+						if (proj.registered == 1
+								&& (proj.type_acti.equals("Mini-Projets")
+								|| proj.type_acti.equals("Projet")))
 						{
-							Calendar c = Calendar.getInstance();
-							c.setTime(format.parse(proj.end_acti));
-							if (c.get(Calendar.DAY_OF_YEAR) == t.get(Calendar.DAY_OF_YEAR))
-								_deliveries.add(proj);
-						}
-						catch (ParseException e)
-						{
-							Toast.makeText(getActivity().getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+							Log.d(this.getClass().getName(), "END_ACTI :: " + proj.end_acti);
+							try
+							{
+								Calendar c = Calendar.getInstance();
+								c.setTime(format.parse(proj.end_acti));
+								if (c.get(Calendar.DAY_OF_YEAR) == t.get(Calendar.DAY_OF_YEAR))
+									_deliveries.add(proj);
+							} catch (ParseException e)
+							{
+								Toast.makeText(getActivity().getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+							}
 						}
 					}
+					listDeliveries.setAdapter(new ListDeliveriesHomeAdapter(getActivity(), _deliveries));
+					rootView.findViewById(R.id.card_deliveries).setVisibility(View.VISIBLE);
+					rootView.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 				}
-				listDeliveries.setAdapter(new ListDeliveriesHomeAdapter(getActivity(), _deliveries));
-				rootView.findViewById(R.id.card_deliveries).setVisibility(View.VISIBLE);
-				rootView.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 			}
 
 			@Override
 			public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse)
 			{
-				if (statusCode >= 400 && statusCode < 500)
-					Toast.makeText(getActivity().getApplicationContext(), "Error from dev, soz !", Toast.LENGTH_LONG).show();
-				else if (statusCode >= 500)
-					Toast.makeText(getActivity().getApplicationContext(), "Server downn, try again later", Toast.LENGTH_LONG).show();
-				else
-					Toast.makeText(getActivity().getApplicationContext(), Integer.toString(statusCode), Toast.LENGTH_LONG).show();
+				if (getActivity() != null)
+				{
+					if (statusCode >= 400 && statusCode < 500)
+						Toast.makeText(getActivity().getApplicationContext(), "Error from dev, soz !", Toast.LENGTH_LONG).show();
+					else if (statusCode >= 500)
+						Toast.makeText(getActivity().getApplicationContext(), "Server downn, try again later", Toast.LENGTH_LONG).show();
+					else
+						Toast.makeText(getActivity().getApplicationContext(), Integer.toString(statusCode), Toast.LENGTH_LONG).show();
+				}
 			}
 
 		});

@@ -63,41 +63,46 @@ public class HomeTomorrow extends Fragment
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, JSONObject response)
 			{
-				SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.FRANCE);
-				Calendar t = Calendar.getInstance();
-				_tomorrow = new ArrayList<>();
-				Infos infos = new Gson().fromJson(response.toString(), Infos.class);
-				for (Infos.Board.Event event:infos.board.activites)
+				if (getActivity() != null)
 				{
-					if (event.date_inscription.equals("false"))
+					SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.FRANCE);
+					Calendar t = Calendar.getInstance();
+					_tomorrow = new ArrayList<>();
+					Infos infos = new Gson().fromJson(response.toString(), Infos.class);
+					for (Infos.Board.Event event : infos.board.activites)
 					{
-						try
+						if (event.date_inscription.equals("false"))
 						{
-							Calendar c = Calendar.getInstance();
-							c.setTime(format.parse(event.timeline_start));
-							if (c.get(Calendar.DAY_OF_MONTH) == t.get(Calendar.DAY_OF_MONTH) + 1)
-								_tomorrow.add(event);
-						}
-						catch (ParseException e)
-						{
-							Toast.makeText(getActivity().getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+							try
+							{
+								Calendar c = Calendar.getInstance();
+								c.setTime(format.parse(event.timeline_start));
+								if (c.get(Calendar.DAY_OF_MONTH) == t.get(Calendar.DAY_OF_MONTH) + 1)
+									_tomorrow.add(event);
+							} catch (ParseException e)
+							{
+								Toast.makeText(getActivity().getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+							}
 						}
 					}
+					listTomorrow.setAdapter(new ListEventsHomeAdapter(getActivity(), _tomorrow, _token));
+					rootView.findViewById(R.id.card_tomorrow).setVisibility(View.VISIBLE);
+					rootView.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 				}
-				listTomorrow.setAdapter(new ListEventsHomeAdapter(getActivity(), _tomorrow, _token));
-				rootView.findViewById(R.id.card_tomorrow).setVisibility(View.VISIBLE);
-				rootView.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 			}
 
 			@Override
 			public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse)
 			{
-				if (statusCode >= 400 && statusCode < 500)
-					Toast.makeText(getActivity().getApplicationContext(), "Error from dev, soz !", Toast.LENGTH_LONG).show();
-				else if (statusCode >= 500)
-					Toast.makeText(getActivity().getApplicationContext(), "Server downn, try again later", Toast.LENGTH_LONG).show();
-				else
-					Toast.makeText(getActivity().getApplicationContext(), Integer.toString(statusCode), Toast.LENGTH_LONG).show();
+				if (getActivity() != null)
+				{
+					if (statusCode >= 400 && statusCode < 500)
+						Toast.makeText(getActivity().getApplicationContext(), "Error from dev, soz !", Toast.LENGTH_LONG).show();
+					else if (statusCode >= 500)
+						Toast.makeText(getActivity().getApplicationContext(), "Server downn, try again later", Toast.LENGTH_LONG).show();
+					else
+						Toast.makeText(getActivity().getApplicationContext(), Integer.toString(statusCode), Toast.LENGTH_LONG).show();
+				}
 			}
 
 		});

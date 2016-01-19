@@ -81,15 +81,7 @@ public class Infos
 	public class Message
 	{
 		public String   title;
-
-		public class User
-		{
-			public String picture;
-			public String title;
-			public String url;
-		}
 		public User     user;
-
 		public String   content;
 		public String   date;
 		public String   visible;
@@ -109,23 +101,6 @@ public class Infos
 
 		public String  internal_email;
 
-		/*
-		public class UserInfo
-		{
-			public class Phone
-			{
-				public String   value;
-			}
-			public Phone    telephone;
-
-			public class Birthday
-			{
-				public String   value;
-			}
-			public Birthday birthday;
-		}
-		public UserInfo userinfo;*/
-
 		public String   picture;
 
 		public String   scolaryear;
@@ -141,6 +116,7 @@ public class Infos
 		public class GPA
 		{
 			public String   gpa;
+			public String   gpa_average;
 			public String   cycle;
 		}
 		public List<GPA>      gpa;

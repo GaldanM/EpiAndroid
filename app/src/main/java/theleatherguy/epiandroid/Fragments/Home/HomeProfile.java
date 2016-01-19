@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -15,49 +14,41 @@ import com.loopj.android.http.RequestParams;
 
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
-
 import cz.msebera.android.httpclient.Header;
-import theleatherguy.epiandroid.Adapters.ListEventsHomeAdapter;
 import theleatherguy.epiandroid.Beans.Infos;
 import theleatherguy.epiandroid.EpitechAPI.EpitechRest;
 import theleatherguy.epiandroid.R;
 
-public class HomeToday extends Fragment
+public class HomeProfile extends Fragment
 {
-	private ListView    listToday;
-	private String                      _token;
-	private List<Infos.Board.Event>     _today;
-	private View                        rootView;
-
+	private View        rootView;
+	private String      token;
+	private String      login;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		rootView = inflater.inflate(R.layout.fragment_today_home, container, false);
+		this.rootView = inflater.inflate(R.layout.fragment_today_home, container, false);
 		super.onCreate(savedInstanceState);
 
 		Intent intent = getActivity().getIntent();
 		if (intent != null)
-			_token = intent.getStringExtra("token");
+		{
+			this.token = intent.getStringExtra("token");
+			this.login = intent.getStringExtra("login");
+		}
 
-		listToday = (ListView) rootView.findViewById(R.id.listToday);
-		listToday.setEmptyView(rootView.findViewById(R.id.emptyToday));
-
-		getToday();
+		getProfile();
 
 		return (rootView);
 	}
 
-	private void getToday()
+	private void getProfile()
 	{
 		RequestParams params = new RequestParams();
-		params.put("token", _token);
+
+		params.put("token", this.token);
+		params.put("login", this.login);
 
 		EpitechRest.get("infos", params, new JsonHttpResponseHandler()
 		{
@@ -66,28 +57,8 @@ public class HomeToday extends Fragment
 			{
 				if (getActivity() != null)
 				{
-					SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.FRANCE);
-					Calendar t = Calendar.getInstance();
-					_today = new ArrayList<>();
 					Infos infos = new Gson().fromJson(response.toString(), Infos.class);
-					for (Infos.Board.Event event : infos.board.activites)
-					{
-						if (event.date_inscription.equals("false"))
-						{
-							try
-							{
-								Calendar c = Calendar.getInstance();
-								c.setTime(format.parse(event.timeline_start));
-								if (c.get(Calendar.DAY_OF_MONTH) == t.get(Calendar.DAY_OF_MONTH) || event.token.equals("1"))
-									_today.add(event);
-							} catch (ParseException e)
-							{
-								Toast.makeText(getActivity().getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-							}
-						}
-					}
-					listToday.setAdapter(new ListEventsHomeAdapter(getActivity(), _today, _token));
-					rootView.findViewById(R.id.card_today).setVisibility(View.VISIBLE);
+					//rootView.findViewById(R.id.profilePanel).setVisibility(View.VISIBLE);
 					rootView.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 				}
 			}

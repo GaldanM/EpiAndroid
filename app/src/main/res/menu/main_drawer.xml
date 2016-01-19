@@ -28,19 +28,9 @@
 			android:id="@+id/nav_planning"
 			android:icon="@drawable/ic_planning"
 			android:title="@string/title_activity_planning"/>
-
-		<item
-			android:id="@+id/nav_events"
-			android:icon="@drawable/ic_event"
-			android:title="@string/title_activity_events"/>
 	</group>
 
 	<group android:id="@+id/group_others" android:checkableBehavior="single">
-		<item
-			android:id="@+id/nav_alerts"
-			android:icon="@drawable/ic_alerts"
-			android:title="@string/title_activity_alerts"/>
-
 		<item
 			android:id="@+id/nav_trombi"
 			android:icon="@drawable/ic_trombi"
