@@ -57,10 +57,8 @@ public class LoginActivity extends AppCompatActivity
 			}
 		});
 
-		// TODO: Ajouter la sauvegarde des crédentials
 		_editLogin.setText("moulin_c");
 		_editPassword.setText("e_5HgyK3");
-		// ENDTODO
 /*
 		if (_editLogin.getText().length() > 0
 				&& _editPassword.getText().length() > 0)

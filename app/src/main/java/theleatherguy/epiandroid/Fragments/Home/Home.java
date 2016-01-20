@@ -20,6 +20,7 @@ public class Home extends Fragment
 		View inflatedView = inflater.inflate(R.layout.content_home, container, false);
 
 		TabLayout tabLayout = (TabLayout) inflatedView.findViewById(R.id.tabs);
+		tabLayout.addTab(tabLayout.newTab().setText("Profile"));
 		tabLayout.addTab(tabLayout.newTab().setText("Today"));
 		tabLayout.addTab(tabLayout.newTab().setText("Tomorrow"));
 		tabLayout.addTab(tabLayout.newTab().setText("Deliveries"));
@@ -60,12 +61,14 @@ public class Home extends Fragment
 			switch (position)
 			{
 				case 0:
-					return new HomeToday();
+					return new HomeProfile();
 				case 1:
-					return new HomeTomorrow();
+					return new HomeToday();
 				case 2:
-					return new HomeDeliveries();
+					return new HomeTomorrow();
 				case 3:
+					return new HomeDeliveries();
+				case 4:
 					return new HomeMarks();
 				default:
 					return null;

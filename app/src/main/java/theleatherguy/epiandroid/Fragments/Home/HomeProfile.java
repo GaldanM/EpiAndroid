@@ -6,21 +6,30 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.squareup.picasso.Picasso;
 
+import org.apache.commons.lang3.text.WordUtils;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
-import theleatherguy.epiandroid.Beans.Infos;
+import theleatherguy.epiandroid.Beans.User;
 import theleatherguy.epiandroid.EpitechAPI.EpitechRest;
 import theleatherguy.epiandroid.R;
+import theleatherguy.epiandroid.RoundedAvatar;
 
 public class HomeProfile extends Fragment
 {
+	private ImageView   profilePicture;
+	private TextView    textFullName;
+	private TextView    textYear;
+
 	private View        rootView;
 	private String      token;
 	private String      login;
@@ -28,7 +37,7 @@ public class HomeProfile extends Fragment
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		this.rootView = inflater.inflate(R.layout.fragment_today_home, container, false);
+		this.rootView = inflater.inflate(R.layout.fragment_profile_home, container, false);
 		super.onCreate(savedInstanceState);
 
 		Intent intent = getActivity().getIntent();
@@ -37,6 +46,10 @@ public class HomeProfile extends Fragment
 			this.token = intent.getStringExtra("token");
 			this.login = intent.getStringExtra("login");
 		}
+
+		profilePicture = (ImageView) rootView.findViewById(R.id.profilePicture);
+		textFullName = (TextView) rootView.findViewById(R.id.fullName);
+		textYear = (TextView) rootView.findViewById(R.id.year);
 
 		getProfile();
 
@@ -48,17 +61,37 @@ public class HomeProfile extends Fragment
 		RequestParams params = new RequestParams();
 
 		params.put("token", this.token);
-		params.put("login", this.login);
+		params.put("user", this.login);
 
-		EpitechRest.get("infos", params, new JsonHttpResponseHandler()
+		EpitechRest.get("user", params, new JsonHttpResponseHandler()
 		{
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, JSONObject response)
 			{
 				if (getActivity() != null)
 				{
-					Infos infos = new Gson().fromJson(response.toString(), Infos.class);
-					//rootView.findViewById(R.id.profilePanel).setVisibility(View.VISIBLE);
+					User user = new Gson().fromJson(response.toString(), User.class);
+
+					Picasso.with(getContext()).load(user.picture).resize(100, 100).transform(new RoundedAvatar()).into(profilePicture);
+					String name = WordUtils.capitalize(user.title);
+					textFullName.setText(name);
+					String year = user.studentyear.toString();
+					switch (user.studentyear)
+					{
+						case 1:
+							year += "st year";
+							break;
+						case 2:
+							year += "nd year";
+							break;
+						case 3:
+							year += "rd year";
+							break;
+						default:
+							year += "th year";
+					}
+					textYear.setText(year);
+					rootView.findViewById(R.id.profilePanel).setVisibility(View.VISIBLE);
 					rootView.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 				}
 			}
@@ -69,11 +102,11 @@ public class HomeProfile extends Fragment
 				if (getActivity() != null)
 				{
 					if (statusCode >= 400 && statusCode < 500)
-						Toast.makeText(getActivity().getApplicationContext(), "Error from dev, soz !", Toast.LENGTH_LONG).show();
+						Toast.makeText(getContext(), "Error from dev from Profile, soz !", Toast.LENGTH_LONG).show();
 					else if (statusCode >= 500)
-						Toast.makeText(getActivity().getApplicationContext(), "Server downn, try again later", Toast.LENGTH_LONG).show();
+						Toast.makeText(getContext(), "Server downn, try again later", Toast.LENGTH_LONG).show();
 					else
-						Toast.makeText(getActivity().getApplicationContext(), Integer.toString(statusCode), Toast.LENGTH_LONG).show();
+						Toast.makeText(getContext(), Integer.toString(statusCode), Toast.LENGTH_LONG).show();
 				}
 			}
 

@@ -36,6 +36,8 @@ public class User
 
 	public Integer semester;
 
+	public Integer studentyear;
+
 	public String location;
 
 	public List<Infos.Board.Event> events;
