@@ -1,12 +1,15 @@
-package theleatherguy.epiandroid;
+package theleatherguy.epiandroid.Utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Shader;
+import android.support.v4.content.ContextCompat;
 
 import com.squareup.picasso.Transformation;
+
+import theleatherguy.epiandroid.R;
 
 public class RoundedAvatar implements Transformation
 {
@@ -18,8 +21,8 @@ public class RoundedAvatar implements Transformation
 			return null;
 		}
 
-		final int borderwidth = 1;
-		final int bordercolor = 0xFFFFFF;
+		final int borderwidth = 0;
+		final int bordercolor = 0x32A0D2;
 		final int width = source.getWidth() + borderwidth;
 		final int height = source.getHeight() + borderwidth;
 

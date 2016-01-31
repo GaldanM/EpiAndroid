@@ -3,6 +3,7 @@ package theleatherguy.epiandroid.Fragments.Home;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,21 +11,20 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
 import theleatherguy.epiandroid.Adapters.ListEventsHomeAdapter;
-import theleatherguy.epiandroid.Beans.Infos;
+import theleatherguy.epiandroid.Beans.Event;
 import theleatherguy.epiandroid.EpitechAPI.EpitechRest;
 import theleatherguy.epiandroid.R;
 
@@ -32,15 +32,15 @@ public class HomeToday extends Fragment
 {
 	private ListView    listToday;
 	private String                      _token;
-	private List<Infos.Board.Event>     _today;
+	private List<Event>     _today;
 	private View                        rootView;
 
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		rootView = inflater.inflate(R.layout.fragment_today_home, container, false);
 		super.onCreate(savedInstanceState);
+		rootView = inflater.inflate(R.layout.fragment_today_home, container, false);
 
 		Intent intent = getActivity().getIntent();
 		if (intent != null)
@@ -56,35 +56,28 @@ public class HomeToday extends Fragment
 
 	private void getToday()
 	{
-		RequestParams params = new RequestParams();
+		final RequestParams params = new RequestParams();
+		Calendar start = Calendar.getInstance();
+		String today = Integer.toString(start.get(Calendar.YEAR)) + "-"
+				+ String.format("%02d", start.get(Calendar.MONTH) + 1) + "-"
+				+ Integer.toString(start.get(Calendar.DAY_OF_MONTH));
 		params.put("token", _token);
+		params.put("start", today);
+		params.put("end", today);
 
-		EpitechRest.get("infos", params, new JsonHttpResponseHandler()
+		EpitechRest.get("planning", params, new JsonHttpResponseHandler()
 		{
 			@Override
-			public void onSuccess(int statusCode, Header[] headers, JSONObject response)
+			public void onSuccess(int statusCode, Header[] headers, JSONArray response)
 			{
 				if (getActivity() != null)
 				{
-					SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.FRANCE);
-					Calendar t = Calendar.getInstance();
+					List<Event> events = new Gson().fromJson(response.toString(), new TypeToken<List<Event>>(){}.getType());
 					_today = new ArrayList<>();
-					Infos infos = new Gson().fromJson(response.toString(), Infos.class);
-					for (Infos.Board.Event event : infos.board.activites)
+					for (Event event : events)
 					{
-						if (event.date_inscription.equals("false"))
-						{
-							try
-							{
-								Calendar c = Calendar.getInstance();
-								c.setTime(format.parse(event.timeline_start));
-								if (c.get(Calendar.DAY_OF_MONTH) == t.get(Calendar.DAY_OF_MONTH) || event.token.equals("1"))
-									_today.add(event);
-							} catch (ParseException e)
-							{
-								Toast.makeText(getActivity().getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-							}
-						}
+						if (event.event_registered.equals("registered"))
+							_today.add(event);
 					}
 					listToday.setAdapter(new ListEventsHomeAdapter(getActivity(), _today, _token));
 					rootView.findViewById(R.id.card_today).setVisibility(View.VISIBLE);
@@ -98,11 +91,9 @@ public class HomeToday extends Fragment
 				if (getActivity() != null)
 				{
 					if (statusCode >= 400 && statusCode < 500)
-						Toast.makeText(getActivity().getApplicationContext(), "Error from dev, soz !", Toast.LENGTH_LONG).show();
+						Toast.makeText(getActivity().getApplicationContext(), "Error from dev TODAY, soz !", Toast.LENGTH_LONG).show();
 					else if (statusCode >= 500)
 						Toast.makeText(getActivity().getApplicationContext(), "Server downn, try again later", Toast.LENGTH_LONG).show();
-					else
-						Toast.makeText(getActivity().getApplicationContext(), Integer.toString(statusCode), Toast.LENGTH_LONG).show();
 				}
 			}
 

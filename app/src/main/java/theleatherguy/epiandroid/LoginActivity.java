@@ -1,13 +1,16 @@
 package theleatherguy.epiandroid;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -38,9 +41,9 @@ public class LoginActivity extends AppCompatActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 
-		_login = new Login();
-
 		setTitle(R.string.title_activity_login);
+
+		findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 
 		TextView logo = (TextView) findViewById(R.id.textLogo);
 		logo.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Raleway.ttf"));
@@ -53,20 +56,27 @@ public class LoginActivity extends AppCompatActivity
 			@Override
 			public void onClick(View view)
 			{
+				InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				View focus = getCurrentFocus();
+				if (focus != null)
+					inputManager.hideSoftInputFromWindow(focus.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 				attemptLogin();
 			}
 		});
 
-		_editLogin.setText("moulin_c");
-		_editPassword.setText("e_5HgyK3");
-/*
-		if (_editLogin.getText().length() > 0
-				&& _editPassword.getText().length() > 0)
-			attemptLogin();*/
+		SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
+		_editLogin.setText(pref.getString("login", null));
+		_editPassword.setText(pref.getString("pass", null));
+
+		if (!_editLogin.getText().toString().isEmpty()
+				&& !_editPassword.getText().toString().isEmpty())
+			attemptLogin();
 	}
 
 	private void attemptLogin()
 	{
+		findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
+
 		_editLogin.setError(null);
 		_editPassword.setError(null);
 
@@ -95,7 +105,10 @@ public class LoginActivity extends AppCompatActivity
 		}
 
 		if (cancel)
+		{
+			findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 			_focusView.requestFocus();
+		}
 		else
 			getToken(login, password);
 	}
@@ -105,9 +118,8 @@ public class LoginActivity extends AppCompatActivity
 		return login.matches("([a-z]{2,6})_([a-z1-9])");
 	}
 
-	public void getToken(final String login, String password)
+	public void getToken(final String login, final String password)
 	{
-		_login.token = null;
 		_bConnect.setEnabled(false);
 		RequestParams params = new RequestParams();
 		params.put("login", login);
@@ -119,10 +131,14 @@ public class LoginActivity extends AppCompatActivity
 			public void onSuccess(int statusCode, Header[] headers, JSONObject response)
 			{
 				_login = new Gson().fromJson(response.toString(), Login.class);
-				_bConnect.setEnabled(true);
 				Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 				intent.putExtra("token", _login.token);
 				intent.putExtra("login", login);
+				SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
+				Editor edit = pref.edit();
+				edit.putString("login", login);
+				edit.putString("pass", password);
+				edit.apply();
 				startActivity(intent);
 			}
 
@@ -133,6 +149,7 @@ public class LoginActivity extends AppCompatActivity
 				{
 					_editPassword.setError(getString(R.string.error_incorrect_cred));
 					_focusView = _editPassword;
+					findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 					_focusView.requestFocus();
 				}
 				else if (statusCode >= 500)

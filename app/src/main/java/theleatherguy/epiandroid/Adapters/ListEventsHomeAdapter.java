@@ -16,17 +16,17 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import theleatherguy.epiandroid.Beans.Infos;
+import theleatherguy.epiandroid.Beans.Event;
 import theleatherguy.epiandroid.Dialogs.TokenDialog;
 import theleatherguy.epiandroid.R;
 
-public class ListEventsHomeAdapter extends ArrayAdapter<Infos.Board.Event>
+public class ListEventsHomeAdapter extends ArrayAdapter<Event>
 {
 	EventViewHolder viewHolder;
 	String          token;
 	Context context;
 
-	public ListEventsHomeAdapter(Context context, List<Infos.Board.Event> listEvents, String token)
+	public ListEventsHomeAdapter(Context context, List<Event> listEvents, String token)
 	{
 		super(context, 0, listEvents);
 		this.context = context;
@@ -36,7 +36,7 @@ public class ListEventsHomeAdapter extends ArrayAdapter<Infos.Board.Event>
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
-		final Infos.Board.Event event = getItem(position);
+		final Event event = getItem(position);
 
 		if (convertView == null)
 			convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_event_home, parent, false);
@@ -55,15 +55,23 @@ public class ListEventsHomeAdapter extends ArrayAdapter<Infos.Board.Event>
 
 		try
 		{
-			SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.FRANCE);
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.FRANCE);
 			Calendar e = Calendar.getInstance();
+			//int dayOfYear = e.get(Calendar.DAY_OF_YEAR);
 			String date = "";
 
-			e.setTime(format.parse(event.timeline_start));
-			date += e.get(Calendar.DAY_OF_MONTH) + "/" + e.get(Calendar.MONTH) + 1 + " -> "
-					+ String.format(Locale.FRANCE, "%02d:%02d", e.get(Calendar.HOUR_OF_DAY), e.get(Calendar.MINUTE)) + " - ";
+			e.setTime(format.parse(event.start));
 
-			e.setTime(format.parse(event.timeline_end));
+			Log.d("DATE", event.start + "\n" + Integer.toString(e.get(Calendar.DAY_OF_MONTH)) + "\t"
+					+ Integer.toString(e.get(Calendar.MONTH)));
+
+			/*if (e.get(Calendar.DAY_OF_YEAR) != dayOfYear
+			&& e.get(Calendar.DAY_OF_YEAR) != dayOfYear + 1)
+			date += String.format(Locale.FRANCE, "%02d", e.get(Calendar.DAY_OF_MONTH)) + "/"
+					+ String.format(Locale.FRANCE, "%02d", e.get(Calendar.MONTH)) + " -> ";*/
+			date += String.format(Locale.FRANCE, "%02d:%02d", e.get(Calendar.HOUR_OF_DAY), e.get(Calendar.MINUTE)) + " - ";
+
+			e.setTime(format.parse(event.end));
 			date += String.format(Locale.FRANCE, "%02d:%02d", e.get(Calendar.HOUR_OF_DAY), e.get(Calendar.MINUTE));
 
 			viewHolder.date.setText(date);
@@ -73,10 +81,10 @@ public class ListEventsHomeAdapter extends ArrayAdapter<Infos.Board.Event>
 			Log.d(this.getClass().getName(), er.getMessage());
 		}
 
-		viewHolder.event.setText(event.title);
-		viewHolder.module.setText(event.module);
-		viewHolder.salle.setText(event.salle);
-		if (event.token.equals("1"))
+		viewHolder.event.setText(event.acti_title);
+		viewHolder.module.setText(event.titlemodule);
+		viewHolder.salle.setText(event.room.code.substring(event.room.code.lastIndexOf("/") + 1, event.room.code.length()));
+		if (event.allow_token)
 		{
 			viewHolder.token.setVisibility(View.VISIBLE);
 			viewHolder.token.setOnClickListener(new View.OnClickListener()

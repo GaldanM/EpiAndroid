@@ -41,8 +41,8 @@ public class HomeDeliveries extends Fragment
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		rootView = inflater.inflate(R.layout.fragment_deliveries_home, container, false);
 		super.onCreate(savedInstanceState);
+		rootView = inflater.inflate(R.layout.fragment_deliveries_home, container, false);
 
 		Intent intent = getActivity().getIntent();
 		if (intent != null)
@@ -71,9 +71,7 @@ public class HomeDeliveries extends Fragment
 					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.FRANCE);
 					Calendar t = Calendar.getInstance();
 					t.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-					List<Infos.Board.Project> projs = new Gson().fromJson(response.toString(), new TypeToken<List<Infos.Board.Project>>()
-					{
-					}.getType());
+					List<Infos.Board.Project> projs = new Gson().fromJson(response.toString(), new TypeToken<List<Infos.Board.Project>>(){}.getType());
 					_deliveries = new ArrayList<>();
 					for (Infos.Board.Project proj : projs)
 					{
@@ -109,8 +107,6 @@ public class HomeDeliveries extends Fragment
 						Toast.makeText(getActivity().getApplicationContext(), "Error from dev, soz !", Toast.LENGTH_LONG).show();
 					else if (statusCode >= 500)
 						Toast.makeText(getActivity().getApplicationContext(), "Server downn, try again later", Toast.LENGTH_LONG).show();
-					else
-						Toast.makeText(getActivity().getApplicationContext(), Integer.toString(statusCode), Toast.LENGTH_LONG).show();
 				}
 			}
 

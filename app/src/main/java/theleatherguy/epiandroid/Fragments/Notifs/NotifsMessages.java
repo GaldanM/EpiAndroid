@@ -1,4 +1,4 @@
-package theleatherguy.epiandroid.Fragments.Home;
+package theleatherguy.epiandroid.Fragments.Notifs;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,66 +10,65 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
-import theleatherguy.epiandroid.Adapters.ListMarksHomeAdapter;
-import theleatherguy.epiandroid.Beans.Infos;
+import theleatherguy.epiandroid.Adapters.ListMessagesNotifsAdapter;
+import theleatherguy.epiandroid.Beans.Message;
 import theleatherguy.epiandroid.EpitechAPI.EpitechRest;
 import theleatherguy.epiandroid.R;
 
-public class HomeMarks extends Fragment
+public class NotifsMessages extends Fragment
 {
-	private ListView    listMarks;
-	private String                      _token;
-	private List<Infos.Board.Mark>      _marks;
-	private View                        rootView;
-
+	private String          token;
+	private ListView        listMessages;
+	private List<Message>   messages;
+	private View            rootView;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		rootView = inflater.inflate(R.layout.fragment_marks_home, container, false);
+		rootView = inflater.inflate(R.layout.fragment_messages_notifs, container, false);
 
 		Intent intent = getActivity().getIntent();
 		if (intent != null)
-			_token = intent.getStringExtra("token");
+			this.token = intent.getStringExtra("token");
 
-		listMarks = (ListView) rootView.findViewById(R.id.listMarks);
-		listMarks.setEmptyView(rootView.findViewById(R.id.emptyMarks));
+		listMessages = (ListView) rootView.findViewById(R.id.listMessages);
+		listMessages.setEmptyView(rootView.findViewById(R.id.emptyMessages));
 
-		getMarks();
+		getMessages();
 
 		return (rootView);
 	}
 
-	private void getMarks()
+	private void getMessages()
 	{
 		RequestParams params = new RequestParams();
-		params.put("token", _token);
+		params.put("token", this.token);
 
-		EpitechRest.get("infos", params, new JsonHttpResponseHandler()
+		EpitechRest.get("messages", params, new JsonHttpResponseHandler()
 		{
 			@Override
-			public void onSuccess(int statusCode, Header[] headers, JSONObject response)
+			public void onSuccess(int statusCode, Header[] headers, JSONArray response)
 			{
 				if (getActivity() != null)
 				{
-					_marks = new ArrayList<>();
-					Infos infos = new Gson().fromJson(response.toString(), Infos.class);
-					for (Infos.Board.Mark mark : infos.board.notes)
-					{
-						_marks.add(mark);
-					}
-					listMarks.setAdapter(new ListMarksHomeAdapter(getActivity(), _marks));
-					rootView.findViewById(R.id.card_marks).setVisibility(View.VISIBLE);
+					List<Message> msgs = new Gson().fromJson(response.toString(), new TypeToken<List<Message>>(){}.getType());
+					messages = new ArrayList<>();
+					for (Message msg : msgs)
+						messages.add(msg);
+					listMessages.setAdapter(new ListMessagesNotifsAdapter(getActivity(), messages));
+					rootView.findViewById(R.id.card_messages).setVisibility(View.VISIBLE);
 					rootView.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 				}
 			}

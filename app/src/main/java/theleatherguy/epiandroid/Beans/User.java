@@ -4,9 +4,13 @@ import java.util.List;
 
 public class User
 {
-	public String picture;
+	public String   login;
 
-	public String title;
+	public String   picture;
+
+	public String   firstname;
+
+	public String lastname;
 
 	public String internal_email;
 
@@ -34,13 +38,17 @@ public class User
 
 	public Integer promo;
 
+	public String course_code;
+
 	public Integer semester;
 
 	public Integer studentyear;
 
 	public String location;
 
-	public List<Infos.Board.Event> events;
+	public Integer  credits;
+
+	public List<Event> events;
 
 	public List<Infos.Info.GPA> gpa;
 

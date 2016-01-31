@@ -14,19 +14,19 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
-import theleatherguy.epiandroid.Beans.Infos;
+import theleatherguy.epiandroid.Beans.Event;
 import theleatherguy.epiandroid.EpitechAPI.EpitechRest;
 import theleatherguy.epiandroid.R;
 
 public class TokenDialog extends AlertDialog.Builder
 {
 	private EditText editText;
-	private Infos.Board.Event event;
+	private Event event;
 
 	private String token;
 	private String code;
 
-	public TokenDialog(Context activity, String token, Infos.Board.Event e)
+	public TokenDialog(Context activity, String token, Event e)
 	{
 		super(activity);
 		event = e;
@@ -48,24 +48,7 @@ public class TokenDialog extends AlertDialog.Builder
 			{
 				code = editText.getText().toString();
 				if (code.length() == 8)
-				{
-					int pos = event.token_link.indexOf('/', 1);
-					String scolar = event.token_link.substring(++pos, event.token_link.indexOf('/', pos));
-
-					pos = event.token_link.indexOf('/', pos);
-					String module = event.token_link.substring(++pos, event.token_link.indexOf('/', pos));
-
-					pos = event.token_link.indexOf('/', pos);
-					String instance = event.token_link.substring(++pos, event.token_link.indexOf('/', pos));
-
-					pos = event.token_link.indexOf('/', pos);
-					String acti = event.token_link.substring(++pos, event.token_link.indexOf('/', pos));
-
-					pos = event.token_link.indexOf('/', pos);
-					String even = event.token_link.substring(++pos, event.token_link.indexOf('/', pos));
-
-					sendToken(token, scolar, module, instance, acti, even, code);
-				}
+					sendToken(token, event.scolaryear, event.codemodule, event.codeinstance, event.codeacti, event.codeevent, code);
 				else
 					Toast.makeText(getContext(), "Incorrect token", Toast.LENGTH_LONG).show();
 

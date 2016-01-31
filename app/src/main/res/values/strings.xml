@@ -36,4 +36,14 @@
 	<string name="empty_today">Nothing to do today</string>
 	<string name="today_activities">Today Activities</string>
 	<string name="token">Token</string>
+	<string name="log_time">Log Time : 0h</string>
+	<string name="zero">0</string>
+	<string name="four">4</string>
+	<string name="student_login">Student\'s login</string>
+	<string name="search">Search</string>
+	<string name="trombi">Trombinoscope</string>
+	<string name="title_activity_notifs">Notifications</string>
+	<string name="empty_messages">No messages for now</string>
+	<string name="empty_alerts">No alerts, congratulations !</string>
+
 </resources>

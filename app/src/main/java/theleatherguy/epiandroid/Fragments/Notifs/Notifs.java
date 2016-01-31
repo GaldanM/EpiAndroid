@@ -1,4 +1,4 @@
-package theleatherguy.epiandroid.Fragments.Home;
+package theleatherguy.epiandroid.Fragments.Notifs;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -10,25 +10,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import theleatherguy.epiandroid.Fragments.Profile;
 import theleatherguy.epiandroid.R;
 
-public class Home extends Fragment
+public class Notifs extends Fragment
 {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		View inflatedView = inflater.inflate(R.layout.content_home, container, false);
+		View inflatedView = inflater.inflate(R.layout.content_notifs, container, false);
 
 		TabLayout tabLayout = (TabLayout) inflatedView.findViewById(R.id.tabs);
 		final ViewPager viewPager = (ViewPager) inflatedView.findViewById(R.id.viewpager);
 
-		tabLayout.addTab(tabLayout.newTab().setText("Profile"));
-		tabLayout.addTab(tabLayout.newTab().setText("Today"));
-		tabLayout.addTab(tabLayout.newTab().setText("Tomorrow"));
-		tabLayout.addTab(tabLayout.newTab().setText("Deliveries"));
-		tabLayout.addTab(tabLayout.newTab().setText("Marks"));
+		tabLayout.addTab(tabLayout.newTab().setText("Messages"));
+		tabLayout.addTab(tabLayout.newTab().setText("Alerts"));
 
 		viewPager.setAdapter(new PagerAdapter(getFragmentManager(), tabLayout.getTabCount()));
 		viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -66,15 +62,9 @@ public class Home extends Fragment
 			switch (position)
 			{
 				case 0:
-					return new Profile();
+					return new NotifsMessages();
 				case 1:
-					return new HomeToday();
-				case 2:
-					return new HomeTomorrow();
-				case 3:
-					return new HomeDeliveries();
-				case 4:
-					return new HomeMarks();
+					return new NotifsAlerts();
 				default:
 					return null;
 			}

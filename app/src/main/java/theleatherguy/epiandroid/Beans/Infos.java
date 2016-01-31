@@ -33,30 +33,6 @@ public class Infos
 		}
 		public List<Mark>       notes;
 
-		public class Event
-		{
-			public String   title;
-
-			public String   module;
-
-			public String   timeline_start;
-
-			public String   timeline_end;
-
-			public String   timeline_barre;
-
-			public String   date_inscription;
-
-			public String   salle;
-
-			public String   intervenant;
-
-			public String   token;
-
-			public String   token_link;
-
-			public String   register_link;
-		}
 		public List<Event>      activites;
 
 		public class Module

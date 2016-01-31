@@ -17,10 +17,6 @@
 			android:id="@+id/nav_projects"
 			android:icon="@drawable/ic_extension"
 			android:title="@string/title_activity_projects"/>
-		<item
-			android:id="@+id/nav_marks"
-			android:icon="@drawable/ic_marks"
-			android:title="@string/title_activity_marks"/>
 	</group>
 
 	<group android:id="@+id/group_activities" android:checkableBehavior="single">
@@ -28,13 +24,14 @@
 			android:id="@+id/nav_planning"
 			android:icon="@drawable/ic_planning"
 			android:title="@string/title_activity_planning"/>
-	</group>
-
-	<group android:id="@+id/group_others" android:checkableBehavior="single">
 		<item
 			android:id="@+id/nav_trombi"
 			android:icon="@drawable/ic_trombi"
 			android:title="@string/title_activity_trombi"/>
+		<item
+			android:id="@+id/nav_notifs"
+			android:icon="@drawable/ic_notifs"
+			android:title="@string/title_activity_notifs"/>
 	</group>
 
 	<group android:id="@+id/group_diconnect" android:checkableBehavior="single">
