@@ -19,6 +19,7 @@ import theleatherguy.epiandroid.Fragments.Home.Home;
 import theleatherguy.epiandroid.Fragments.Modules.Modules;
 import theleatherguy.epiandroid.Fragments.Notifs.Notifs;
 import theleatherguy.epiandroid.Fragments.Planning.Planning;
+import theleatherguy.epiandroid.Fragments.Projets.Projet;
 import theleatherguy.epiandroid.Fragments.Trombi.Trombi;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
@@ -106,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 					fragment = new Modules();
 					break;
 				case R.id.nav_projects:
+					fragment = new Projet();
 					break;
 				case R.id.nav_planning:
 					fragment = new Planning();
