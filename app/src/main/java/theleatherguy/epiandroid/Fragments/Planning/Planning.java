@@ -145,7 +145,6 @@ public class Planning extends Fragment {
                     for (Event i : event) {
                         if (sort == 0) {
                             if (i.semester == _infos.infos.semester
-                                    || i.semester == _infos.infos.semester + 1
                                     || i.semester == 0)
                                 eventsList.add(i);
                         } else if (sort == 1) {

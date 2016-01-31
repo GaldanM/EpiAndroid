@@ -55,7 +55,8 @@ public class ListPlanning extends BaseAdapter {
         horaire.setText(_event.get(position).start +  "-" +  _event.get(position).end);
 
         TextView room = (TextView)layoutItem.findViewById(R.id.room);
-        room.setText(_event.get(position).room.code);
+        if (_event.get(position).room != null)
+            room.setText(_event.get(position).room.code);
 
         return layoutItem;
     }
