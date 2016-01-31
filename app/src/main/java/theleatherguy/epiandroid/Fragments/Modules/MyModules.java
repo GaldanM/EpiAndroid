@@ -97,6 +97,7 @@ public class MyModules extends Fragment {
                         Toast.makeText(getActivity().getApplicationContext(), "Server downn, try again later", Toast.LENGTH_LONG).show();
                     else
                         Toast.makeText(getActivity().getApplicationContext(), Integer.toString(statusCode), Toast.LENGTH_LONG).show();
+                    inflatedView.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
                 }
             }
 

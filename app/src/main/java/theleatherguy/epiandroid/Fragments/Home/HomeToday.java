@@ -94,6 +94,7 @@ public class HomeToday extends Fragment
 						Toast.makeText(getActivity().getApplicationContext(), "Error from dev TODAY, soz !", Toast.LENGTH_LONG).show();
 					else if (statusCode >= 500)
 						Toast.makeText(getActivity().getApplicationContext(), "Server downn, try again later", Toast.LENGTH_LONG).show();
+					rootView.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 				}
 			}
 

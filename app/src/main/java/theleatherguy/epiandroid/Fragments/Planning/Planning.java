@@ -69,10 +69,11 @@ public class Planning extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                _inflatedView.findViewById(R.id.listPlanning).setVisibility(View.GONE);
+                _inflatedView.findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
                 sort = position;
                 _listView.invalidateViews();
                 getInfos();
-                Toast.makeText(getActivity(), parent.getItemIdAtPosition(position) + " selected", Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -176,6 +177,7 @@ public class Planning extends Fragment {
                         Toast.makeText(getActivity().getApplicationContext(), "Server downn, try again later", Toast.LENGTH_LONG).show();
                     else
                         Toast.makeText(getActivity().getApplicationContext(), Integer.toString(statusCode), Toast.LENGTH_LONG).show();
+                    _inflatedView.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
                 }
             }
         });
