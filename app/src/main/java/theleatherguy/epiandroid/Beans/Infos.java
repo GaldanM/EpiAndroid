@@ -89,6 +89,8 @@ public class Infos
 
 		public Integer  credits;
 
+		public String  course_code;
+
 		public class GPA
 		{
 			public String   gpa;

@@ -46,4 +46,9 @@
 	<string name="empty_messages">No messages for now</string>
 	<string name="empty_alerts">No alerts, congratulations !</string>
 
+	<string-array name="country_arrays">
+		<item>All current semester modules</item>
+		<item>Only enrolled modules selected</item>
+		<item>Only enrolled activities selected</item>
+	</string-array>
 </resources>

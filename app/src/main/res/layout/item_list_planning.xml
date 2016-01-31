@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.03">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/eventTitle"
+            android:text="BLABLA"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="4dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="13:00-14:00"
+            android:id="@+id/horaire"
+            android:layout_gravity="center_horizontal"
+            android:layout_below="@+id/eventTitle"
+            android:layout_alignLeft="@+id/eventTitle"
+            android:layout_alignStart="@+id/eventTitle" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/room"
+            android:text="paster"
+            android:layout_below="@+id/horaire"
+            android:layout_alignLeft="@+id/horaire"
+            android:layout_alignStart="@+id/horaire" />
+
+    </RelativeLayout>
+
+</LinearLayout>
