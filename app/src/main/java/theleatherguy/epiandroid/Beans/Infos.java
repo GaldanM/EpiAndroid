@@ -83,7 +83,7 @@ public class Infos
 
 		public String   promo;
 
-		public String   semester;
+		public int   semester;
 
 		public String   location;
 

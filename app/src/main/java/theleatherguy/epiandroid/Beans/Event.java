@@ -14,6 +14,8 @@ public class Event
 
 	public String   end;
 
+	public int semester;
+
 	public class Room
 	{
 		public String code;

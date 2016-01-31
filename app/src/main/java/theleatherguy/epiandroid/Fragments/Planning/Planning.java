@@ -144,13 +144,16 @@ public class Planning extends Fragment {
                     List<Event> eventsList = new ArrayList<>();
                     for (Event i : event) {
                         if (sort == 0) {
-                            eventsList.add(i);
+                            if (i.semester == _infos.infos.semester
+                                    || i.semester == _infos.infos.semester + 1
+                                    || i.semester == 0)
+                                eventsList.add(i);
                         } else if (sort == 1) {
                             if (i.module_registered) {
                                 eventsList.add(i);
                             }
                         } else if (sort == 2) {
-                            if (i.event_registered == "registered") {
+                            if (!i.event_registered.equals("false")) {
                                 eventsList.add(i);
                             }
                         }
