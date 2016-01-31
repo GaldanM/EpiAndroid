@@ -18,7 +18,7 @@ public class Modules extends Fragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View inflatedView = inflater.inflate(R.layout.content_home, container, false);
+        View inflatedView = inflater.inflate(R.layout.content_notifs, container, false);
 
         final TabLayout tabLayout = (TabLayout) inflatedView.findViewById(R.id.tabs);
         tabLayout.addTab(tabLayout.newTab().setText("My Modules"));
