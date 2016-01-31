@@ -89,6 +89,8 @@ public class Planning extends Fragment {
                 picker.setArguments(args);
                 picker.show(getFragmentManager(), "datePicker");
                 picker.setTargetFragment(Planning.this, 1);
+                _inflatedView.findViewById(R.id.listPlanning).setVisibility(View.GONE);
+                _inflatedView.findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
             }
         });
 
@@ -160,6 +162,8 @@ public class Planning extends Fragment {
                     ListPlanning planningAdapter = new ListPlanning(eventsList, getActivity());
                     _listView.setAdapter(planningAdapter);
                     planningAdapter.notifyDataSetChanged();
+                    _inflatedView.findViewById(R.id.listPlanning).setVisibility(View.VISIBLE);
+                    _inflatedView.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
                 }
             }
 

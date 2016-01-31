@@ -34,11 +34,12 @@ public class AllModules extends Fragment {
     private String _token = null;
     private ListView listView = null;
     private Infos _infos = null;
+    private View inflatedView = null;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View inflatedView = inflater.inflate(R.layout.fragment_list_allmodules, container, false);
+        inflatedView = inflater.inflate(R.layout.fragment_list_allmodules, container, false);
         super.onCreate(savedInstanceState);
 
         Intent intent = getActivity().getIntent();
@@ -71,6 +72,8 @@ public class AllModules extends Fragment {
                     }
                     ListAllModulesAdapter adapter = new ListAllModulesAdapter(listModule, getActivity());
                     listView.setAdapter(adapter);
+                    inflatedView.findViewById(R.id.listViewAllModules).setVisibility(View.VISIBLE);
+                    inflatedView.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
                 }
             }
 

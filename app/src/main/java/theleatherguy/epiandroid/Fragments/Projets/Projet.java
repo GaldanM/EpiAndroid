@@ -42,11 +42,12 @@ public class Projet extends Fragment {
     HashMap<String, List<String[]>> listDataChild;
     private String _token;
     private Infos _infos = null;
+    private View inflatedView = null;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View inflatedView = inflater.inflate(R.layout.fragment_module, container, false);
+        inflatedView = inflater.inflate(R.layout.fragment_module, container, false);
         super.onCreate(savedInstanceState);
 
         Intent intent = getActivity().getIntent();
@@ -102,6 +103,8 @@ public class Projet extends Fragment {
                     }
                     listAdapter = new AdapterModuleExpendableListView(getActivity(), listDataHeader, listDataChild);
                     expListView.setAdapter(listAdapter);
+                    inflatedView.findViewById(R.id.expandableModuleListView).setVisibility(View.VISIBLE);
+                    inflatedView.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
                 }
             }
 
