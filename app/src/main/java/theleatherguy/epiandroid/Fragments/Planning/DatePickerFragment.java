@@ -39,7 +39,6 @@ public class DatePickerFragment extends android.support.v4.app.DialogFragment im
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String formattedDate = sdf.format(c.getTime());
-        Toast.makeText(getActivity(), formattedDate, Toast.LENGTH_LONG).show();
         Intent intent = getActivity().getIntent();
         intent.putExtra("DATE", formattedDate);
         intent.putExtra("year", year);
