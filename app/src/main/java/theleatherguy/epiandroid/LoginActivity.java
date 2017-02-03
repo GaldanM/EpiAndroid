@@ -115,7 +115,7 @@ public class LoginActivity extends AppCompatActivity
 
 	private boolean validateLogin(String login)
 	{
-		return login.matches("([a-z]{2,6})_([a-z1-9])");
+		return login.matches("[a-z]+?\\.[a-z]+@epitech\\.eu");
 	}
 
 	public void getToken(final String login, final String password)

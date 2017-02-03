@@ -2,12 +2,12 @@
 	<string name="app_name">EpiAndroid</string>
 
 	<string name="title_activity_login">Login</string>
-	<string name="prompt_login">Login</string>
+	<string name="prompt_login">Email</string>
 	<string name="prompt_password">Password</string>
 	<string name="action_log_in">Log In</string>
 	<string name="action_disconnect">Disconnect</string>
-	<string name="error_invalid_login">Incorrect login format</string>
-	<string name="error_incorrect_cred">Incorrect login/password</string>
+	<string name="error_invalid_login">Incorrect email format</string>
+	<string name="error_incorrect_cred">Incorrect email/password combinaison</string>
 	<string name="error_field_required">This field is required</string>
 	<string name="remember_me">Remember me</string>
 
@@ -39,7 +39,7 @@
 	<string name="log_time">Log Time : 0h</string>
 	<string name="zero">0</string>
 	<string name="four">4</string>
-	<string name="student_login">Student\'s login</string>
+	<string name="student_login">Student\'s email</string>
 	<string name="search">Search</string>
 	<string name="trombi">Trombinoscope</string>
 	<string name="title_activity_notifs">Notifications</string>

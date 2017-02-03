@@ -76,7 +76,7 @@ public class Trombi extends Fragment
 
 	private boolean validateLogin(String login)
 	{
-		return login.matches("([a-z]{2,6})_([a-z1-9])");
+		return login.matches("[a-z]+?\\.[a-z]+@epitech\\.eu");
 	}
 
 	private void    getUser(final String login)
